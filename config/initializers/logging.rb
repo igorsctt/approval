@@ -59,6 +59,10 @@ end
 if Rails.env.production?
   require 'logger'
   
+  # Ensure log directory exists
+  log_dir = Rails.root.join('log')
+  FileUtils.mkdir_p(log_dir) unless Dir.exist?(log_dir)
+  
   # Set up log rotation
   logger = Logger.new(
     Rails.root.join('log', 'production.log'),
