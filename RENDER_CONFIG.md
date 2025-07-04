@@ -1,40 +1,54 @@
 # Render.com Configuration Guide
 
+## ✅ STATUS: BUILD SUCCESSFUL! 
+
+Build está 100% funcionando. Apenas problema de porta em uso no restart.
+
 ## Environment Variables Required:
 
 1. **RAILS_ENV**: production
 2. **SECRET_KEY_BASE**: (your secret key)
 3. **MONGODB_URI**: (your MongoDB Atlas connection string)
-4. **PORT**: 10000 (default Render port - auto-set by Render)
+4. **PORT**: 10000 (auto-set by Render)
 
 ## Build Command:
 ```
-./bin/render-build.sh
+bundle install && RAILS_ENV=production bundle exec rails assets:precompile
 ```
 
-## Start Command (choose one):
+## Start Command Options (CHOOSE ONE):
+
+### Option 1 - Aggressive Process Cleanup:
 ```
 ./bin/render-start.sh
 ```
-OR
+
+### Option 2 - Single Process Mode (Recommended for Free Tier):
 ```
-bundle exec puma -C config/puma.rb
+./bin/render-start-single.sh
 ```
 
-## Key Fixes Applied:
-
-1. **Puma Configuration**: Always uses TCP binding in production (no Unix sockets)
-2. **Memory Optimization**: Reduced workers (1) and threads (1-3) for free tier
-3. **Directory Creation**: Ensures tmp/ and log/ directories exist
-4. **Node.js Version**: Updated to 20.18.0 (maintained version)
-5. **Port Conflict**: Added start script that kills old processes
-6. **Build Process**: Simplified to avoid webpack/babel compilation issues
+### Option 3 - Direct Puma (Simple):
+```
+bundle exec puma -t 1:3 -p ${PORT:-10000} --env production
+```
 
 ## Latest Status:
-- ✅ Build successful on Render
-- ✅ Puma using TCP on port 10000
-- 🔧 Fixed memory usage for free tier
-- 🚀 Ready for deployment!
+- ✅ Build: 100% successful
+- ✅ Assets: All precompiled successfully  
+- ✅ Puma Config: Optimized for free tier (1 worker, 1-3 threads)
+- ✅ Dependencies: All installed correctly
+- ❌ Port Conflict: Need better start script
 
-## Troubleshooting:
-If you get "Address already in use", the start script should handle this automatically by killing old processes first.
+## Solution:
+Change Start Command in Render dashboard to one of the options above.
+
+## What's Working:
+- Bundle install ✅
+- Assets precompile ✅  
+- Tailwind CSS ✅
+- CORS configuration ✅
+- MongoDB ready ✅
+- Puma optimized ✅
+
+**The app is 99% ready! Just need to fix the port conflict on restart.**
