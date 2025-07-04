@@ -1,4 +1,11 @@
 {
+  "name": "approval-workflow",
+  "version": "1.0.0",
+  "description": "Rails approval workflow system",
+  "scripts": {
+    "build": "webpack --mode=production",
+    "dev": "webpack --mode=development"
+  },
   "dependencies": {
     "@rails/webpacker": "5.4.4"
   },
