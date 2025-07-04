@@ -222,7 +222,8 @@ GEM
       prettyprint
     prettyprint (0.2.0)
     prism (1.4.0)
-    psych (4.0.6)
+    psych (5.2.6)
+      date
       stringio
     public_suffix (6.0.2)
     puma (6.6.0)
@@ -435,7 +436,6 @@ DEPENDENCIES
   lograge
   mail
   mongoid (~> 8.1)
-  psych (~> 4.0)
   puma (~> 6.0)
   rack-cors
   rails (~> 7.2.0)

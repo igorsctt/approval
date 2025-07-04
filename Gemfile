@@ -39,10 +39,7 @@ gem 'bcrypt', '~> 3.1.7'
 # JWT for authentication
 gem 'jwt'
 
-# Force older psych version that works better
-gem 'psych', '~> 4.0'
-
-# YAML processing (alternative to problematic psych)
+# YAML processing
 gem 'safe_yaml'
 
 # CORS handling

@@ -1,0 +1,39 @@
+# Railway ignore file - arquivos que não precisam no deploy
+
+# Development
+.env.development
+.env.test
+
+# Testing
+test/
+spec/
+coverage/
+
+# Documentation
+docs/
+*.md
+!README.md
+
+# Git
+.git/
+.gitignore
+
+# Editor
+.vscode/
+.idea/
+
+# Cache and logs
+tmp/
+log/
+storage/
+
+# Local gems and bundle config
+vendor/bundle/
+.bundle/
+
+# Node modules (if any)
+node_modules/
+
+# OS files
+.DS_Store
+Thumbs.db

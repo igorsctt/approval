@@ -1,13 +1,11 @@
 [phases.setup]
-nixPkgs = ['nodejs', 'yarn', 'libyaml-dev', 'pkg-config', 'gcc', 'make']
+nixPkgs = ['ruby_3_1', 'libyaml-dev']
 
 [phases.install]
-cmds = ['bundle install --without development test']
+cmds = ['bundle install --without development:test']
 
 [phases.build]
-cmds = [
-  'bundle exec rails assets:precompile'
-]
+cmds = ['RAILS_ENV=production bundle exec rails assets:precompile']
 
 [start]
 cmd = 'bundle exec puma -C config/puma.rb'

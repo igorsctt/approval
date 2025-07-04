@@ -17,7 +17,7 @@ RAILS_MASTER_KEY=f81b002ec2ca5dd82b519c349b41ec4c
 JWT_SECRET=ed7683680a3f617d7ac802b3ea2454fc4eb9784e243de5dcafc2087839994526
 
 # MongoDB Atlas (CONFIGURE DEPOIS DE CRIAR CLUSTER)
-MONGODB_URI=mongodb+srv://usuario:senha@cluster0.xxxxx.mongodb.net/approval_production
+MONGODB_URI=mongodb+srv://kaefer_user:KaeferApproval2024!@kaefer-approval.i3rewq4.mongodb.net/kaefer_approval?retryWrites=true&w=majority
 ```
 
 ### 📧 OPCIONAIS (Email - Configure depois)
