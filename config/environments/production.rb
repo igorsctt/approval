@@ -162,8 +162,8 @@ Rails.application.configure do
   config.exceptions_app = self.routes
 
   # Asset compression
-  config.assets.js_compressor = :terser
-  config.assets.css_compressor = :sass
+  config.assets.js_compressor = nil  # Disable JS compression to avoid ExecJS issues
+  config.assets.css_compressor = nil # Disable CSS compression 
 
   # Precompile additional assets
   config.assets.precompile += %w( application.js application.css )
