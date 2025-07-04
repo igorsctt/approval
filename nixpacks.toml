@@ -1,8 +1,8 @@
 [phases.setup]
-nixPkgs = ['nodejs', 'yarn']
+nixPkgs = ['nodejs', 'yarn', 'libyaml', 'pkg-config']
 
 [phases.install]
-cmds = ['bundle install']
+cmds = ['bundle config build.psych --with-libyaml-dir=/nix/store/*libyaml*', 'bundle install']
 
 [phases.build]
 cmds = [

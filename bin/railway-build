@@ -1,0 +1,22 @@
+#!/bin/bash
+# Railway build script
+
+set -e
+
+echo "🔧 Installing system dependencies..."
+# Install libyaml for psych gem
+if command -v apt-get &> /dev/null; then
+    apt-get update && apt-get install -y libyaml-dev
+fi
+
+echo "📦 Installing Ruby gems..."
+bundle config build.psych --with-libyaml-dir
+bundle install
+
+echo "🎨 Precompiling assets..."
+bundle exec rails assets:precompile
+
+echo "📊 Creating MongoDB indexes..."
+bundle exec rails db:mongoid:create_indexes
+
+echo "✅ Build completed successfully!"
