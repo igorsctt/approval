@@ -1,0 +1,31 @@
+# Active Storage configuration for different environments
+
+# Use local storage for development and test environments
+local:
+  service: Disk
+  root: <%= Rails.root.join("storage") %>
+
+# Use local storage for production (can be changed to cloud providers later)
+production:
+  service: Disk
+  root: <%= Rails.root.join("storage") %>
+
+# Alternative cloud storage configurations (for future use)
+# amazon:
+#   service: S3
+#   access_key_id: <%= ENV['AWS_ACCESS_KEY_ID'] %>
+#   secret_access_key: <%= ENV['AWS_SECRET_ACCESS_KEY'] %>
+#   region: <%= ENV['AWS_REGION'] %>
+#   bucket: <%= ENV['AWS_BUCKET'] %>
+
+# google:
+#   service: GCS
+#   project: <%= ENV['GOOGLE_CLOUD_PROJECT'] %>
+#   credentials: <%= ENV['GOOGLE_CLOUD_CREDENTIALS'] %>
+#   bucket: <%= ENV['GOOGLE_CLOUD_BUCKET'] %>
+
+# azure:
+#   service: AzureStorage
+#   storage_account_name: <%= ENV['AZURE_STORAGE_ACCOUNT_NAME'] %>
+#   storage_access_key: <%= ENV['AZURE_STORAGE_ACCESS_KEY'] %>
+#   container: <%= ENV['AZURE_STORAGE_CONTAINER'] %>

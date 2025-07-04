@@ -18,6 +18,8 @@ gem 'puma', '~> 6.0'
 # Use SCSS for stylesheets
 gem 'sass-rails', '>= 6'
 
+# JavaScript runtime (removed mini_racer due to native compilation issues)
+
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 gem 'webpacker', '~> 5.0'
 
@@ -111,8 +113,7 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 group :production do
   # Better logging for production
   gem 'lograge'
-  # Compress assets
-  gem 'terser', '~> 1.1'
+  # JavaScript runtime removed (mini_racer) due to build issues on free hosting
 end
 
 gem "sinatra", "~> 4.1"
