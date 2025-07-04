@@ -5,28 +5,36 @@
 1. **RAILS_ENV**: production
 2. **SECRET_KEY_BASE**: (your secret key)
 3. **MONGODB_URI**: (your MongoDB Atlas connection string)
-4. **RENDER**: true (to enable TCP binding)
-5. **PORT**: 10000 (default Render port)
+4. **PORT**: 10000 (default Render port - auto-set by Render)
 
 ## Build Command:
 ```
 ./bin/render-build.sh
 ```
 
-## Start Command:
+## Start Command (choose one):
+```
+./bin/render-start.sh
+```
+OR
 ```
 bundle exec puma -C config/puma.rb
 ```
 
 ## Key Fixes Applied:
 
-1. **Puma Configuration**: Uses TCP binding instead of Unix sockets for cloud platforms
-2. **Directory Creation**: Ensures tmp/ and log/ directories exist
-3. **Node.js Version**: Updated to 20.18.0 (maintained version)
-4. **Build Process**: Simplified to avoid webpack/babel compilation issues
+1. **Puma Configuration**: Always uses TCP binding in production (no Unix sockets)
+2. **Memory Optimization**: Reduced workers (1) and threads (1-3) for free tier
+3. **Directory Creation**: Ensures tmp/ and log/ directories exist
+4. **Node.js Version**: Updated to 20.18.0 (maintained version)
+5. **Port Conflict**: Added start script that kills old processes
+6. **Build Process**: Simplified to avoid webpack/babel compilation issues
 
-## Deployment Status:
-- ✅ Build process working
-- ✅ Dependencies installed
-- 🔧 Puma configuration fixed for Render
+## Latest Status:
+- ✅ Build successful on Render
+- ✅ Puma using TCP on port 10000
+- 🔧 Fixed memory usage for free tier
 - 🚀 Ready for deployment!
+
+## Troubleshooting:
+If you get "Address already in use", the start script should handle this automatically by killing old processes first.

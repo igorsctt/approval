@@ -10,7 +10,7 @@ gem 'rails', '~> 7.2.0'
 gem 'mongoid', '~> 8.1'
 
 # NullDB adapter to prevent ActiveRecord database errors
-gem "activerecord-nulldb-adapter"
+gem 'activerecord-nulldb-adapter'
 
 # Use Puma as the app server
 gem 'puma', '~> 6.0'
@@ -79,11 +79,11 @@ gem 'bootsnap', '>= 1.4.4', require: false
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
-  gem 'rspec-rails'
+  gem 'byebug', platforms: %i[mri mingw x64_mingw]
+  gem 'database_cleaner-mongoid'
   gem 'factory_bot_rails'
   gem 'faker'
-  gem 'database_cleaner-mongoid'
+  gem 'rspec-rails'
 end
 
 group :development do
@@ -93,9 +93,9 @@ group :development do
   # Can be commented out to disable the feature.
   gem 'listen', '~> 3.3'
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  gem 'spring'
   gem 'rubocop', require: false
   gem 'rubocop-rails', require: false
+  gem 'spring'
 end
 
 group :test do
@@ -107,7 +107,7 @@ group :test do
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
 # Production optimizations
 group :production do
@@ -116,4 +116,4 @@ group :production do
   # JavaScript runtime removed (mini_racer) due to build issues on free hosting
 end
 
-gem "sinatra", "~> 4.1"
+gem 'sinatra', '~> 4.1'

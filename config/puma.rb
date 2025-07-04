@@ -3,26 +3,27 @@
 # Any libraries that use thread pools should be configured to match
 # the maximum value specified for Puma. Default is set to 5 threads for minimum
 # and maximum; this matches the default thread size of Active Record.
+# Reduced for free tier memory efficiency
 #
-max_threads_count = ENV.fetch("RAILS_MAX_THREADS") { 5 }
-min_threads_count = ENV.fetch("RAILS_MIN_THREADS") { max_threads_count }
+max_threads_count = ENV.fetch('RAILS_MAX_THREADS') { 3 }
+min_threads_count = ENV.fetch('RAILS_MIN_THREADS') { 1 }
 threads min_threads_count, max_threads_count
 
 # Specifies the `worker_timeout` threshold that Puma will use to wait before
 # terminating a worker in development environments.
 #
-worker_timeout 3600 if ENV.fetch("RAILS_ENV", "development") == "development"
+worker_timeout 3600 if ENV.fetch('RAILS_ENV', 'development') == 'development'
 
 # Specifies the `port` that Puma will listen on to receive requests; default is 3000.
 #
-port ENV.fetch("PORT") { 3000 }
+port ENV.fetch('PORT') { 3000 }
 
 # Specifies the `environment` that Puma will run in.
 #
-environment ENV.fetch("RAILS_ENV") { "development" }
+environment ENV.fetch('RAILS_ENV') { 'development' }
 
 # Specifies the `pidfile` that Puma will use.
-pidfile ENV.fetch("PIDFILE") { "tmp/pids/server.pid" }
+pidfile ENV.fetch('PIDFILE') { 'tmp/pids/server.pid' }
 
 # Specifies the number of `workers` to boot in clustered mode.
 # Workers are forked web server processes. If using threads and workers together
@@ -30,7 +31,7 @@ pidfile ENV.fetch("PIDFILE") { "tmp/pids/server.pid" }
 # Workers do not work on JRuby or Windows (both of which do not support
 # processes).
 #
-workers ENV.fetch("WEB_CONCURRENCY") { 2 }
+workers ENV.fetch('WEB_CONCURRENCY') { 1 }
 
 # Use the `preload_app!` method when specifying a `workers` number.
 # This directive tells Puma to first boot the application and load code
@@ -43,44 +44,36 @@ preload_app!
 plugin :tmp_restart
 
 # Configuration for development environment
-if ENV.fetch("RAILS_ENV", "development") == "development"
+if ENV.fetch('RAILS_ENV', 'development') == 'development'
   # Bind to all interfaces in development
-  bind "tcp://0.0.0.0:#{ENV.fetch("PORT") { 3000 }}"
+  bind "tcp://0.0.0.0:#{ENV.fetch('PORT') { 3000 }}"
 end
 
 # Production configuration
-if ENV.fetch("RAILS_ENV", "development") == "production"
-  # For Render.com and similar cloud platforms, use TCP binding instead of Unix sockets
-  if ENV["RENDER"] || ENV["HEROKU"] || ENV["RAILWAY"]
-    # Cloud platforms like Render use TCP, not Unix sockets
-    bind "tcp://0.0.0.0:#{ENV.fetch("PORT") { 10000 }}"
-  else
-    # Traditional production setup with Unix sockets
-    bind "unix://#{ENV.fetch("PUMA_SOCKET", "tmp/sockets/puma.sock")}"
-  end
-  
+if ENV.fetch('RAILS_ENV', 'development') == 'production'
+  # Always use TCP binding in production for cloud platforms
+  bind "tcp://0.0.0.0:#{ENV.fetch('PORT') { 10_000 }}"
+
   # Redirect output to log files
-  stdout_redirect ENV.fetch("PUMA_STDOUT_LOG", "log/puma.stdout.log"), 
-                  ENV.fetch("PUMA_STDERR_LOG", "log/puma.stderr.log"), 
+  stdout_redirect ENV.fetch('PUMA_STDOUT_LOG', 'log/puma.stdout.log'),
+                  ENV.fetch('PUMA_STDERR_LOG', 'log/puma.stderr.log'),
                   true
-  
+
   # Specify the PID file location
-  pidfile ENV.fetch("PUMA_PIDFILE", "tmp/pids/puma.pid")
-  
-  # Change to match your CPU core count
-  workers ENV.fetch("WEB_CONCURRENCY") { 4 }
-  
-  # Min and Max threads per worker
-  threads 1, 6
-  
+  pidfile ENV.fetch('PUMA_PIDFILE', 'tmp/pids/puma.pid')
+
+  # Change to match your CPU core count - use 1 for free tier
+  workers ENV.fetch('WEB_CONCURRENCY') { 1 }
+
+  # Min and Max threads per worker - reduced for memory efficiency
+  threads 1, 3
+
   # Use the tag to identify the process
-  tag "approval_workflow"
+  tag 'approval_workflow'
 end
 
 # MongoDB configuration for production
 on_worker_boot do
   # Configuração específica para Mongoid em produção
-  if defined?(Mongoid)
-    Mongoid.load!(Rails.root.join('config', 'mongoid.yml'), Rails.env)
-  end
+  Mongoid.load!(Rails.root.join('config', 'mongoid.yml'), Rails.env) if defined?(Mongoid)
 end
