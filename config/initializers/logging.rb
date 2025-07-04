@@ -62,8 +62,7 @@ if Rails.env.production?
   # Set up log rotation
   logger = Logger.new(
     Rails.root.join('log', 'production.log'),
-    'daily',
-    keep: 30  # Keep 30 days of logs
+    'daily'
   )
   
   Rails.logger = ActiveSupport::TaggedLogging.new(logger)
