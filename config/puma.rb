@@ -50,8 +50,14 @@ end
 
 # Production configuration
 if ENV.fetch("RAILS_ENV", "development") == "production"
-  # Bind to Unix socket in production
-  bind "unix://#{ENV.fetch("PUMA_SOCKET", "tmp/sockets/puma.sock")}"
+  # For Render.com and similar cloud platforms, use TCP binding instead of Unix sockets
+  if ENV["RENDER"] || ENV["HEROKU"] || ENV["RAILWAY"]
+    # Cloud platforms like Render use TCP, not Unix sockets
+    bind "tcp://0.0.0.0:#{ENV.fetch("PORT") { 10000 }}"
+  else
+    # Traditional production setup with Unix sockets
+    bind "unix://#{ENV.fetch("PUMA_SOCKET", "tmp/sockets/puma.sock")}"
+  end
   
   # Redirect output to log files
   stdout_redirect ENV.fetch("PUMA_STDOUT_LOG", "log/puma.stdout.log"), 
