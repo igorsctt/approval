@@ -21,7 +21,7 @@ gem 'sass-rails', '>= 6'
 # JavaScript runtime (removed mini_racer due to native compilation issues)
 
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
-gem 'webpacker', '~> 5.0'
+# gem 'webpacker', '~> 5.0'  # Temporarily disabled due to build issues
 
 # Turbo for fast page navigation
 gem 'turbo-rails'

@@ -3,7 +3,12 @@
 
 set -o errexit
 
-# Install dependencies
+# Install Node.js dependencies
+echo "Installing Node.js dependencies..."
+npm install
+
+# Install Ruby dependencies
+echo "Installing Ruby dependencies..."
 bundle install
 
 # Skip assets precompilation for now due to webpack/babel issues
