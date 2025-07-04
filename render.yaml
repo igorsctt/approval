@@ -1,0 +1,21 @@
+# Render.com Configuration
+services:
+  - type: web
+    name: kaefer-approval-system
+    env: ruby
+    buildCommand: "./bin/render-build.sh"
+    startCommand: "bundle exec puma -C config/puma.rb"
+    plan: free
+    region: oregon
+    branch: main
+    envVars:
+      - key: RAILS_ENV
+        value: production
+      - key: RAILS_SERVE_STATIC_FILES
+        value: true
+      - key: RAILS_LOG_TO_STDOUT
+        value: true
+      - key: SECRET_KEY_BASE
+        generateValue: true
+      - key: MONGODB_URI
+        value: mongodb+srv://admin:Kaefer2024!@cluster0.b3wxy.mongodb.net/approval_system
