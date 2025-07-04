@@ -14,7 +14,7 @@ class JwtService
     Rails.logger.error "JWT decode error: #{e.message}"
     raise e
   end
-  
+
   def self.valid_token?(token)
     decode(token)
     true

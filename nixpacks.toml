@@ -1,13 +1,12 @@
 [phases.setup]
-nixPkgs = ['nodejs', 'yarn', 'libyaml', 'pkg-config']
+nixPkgs = ['nodejs', 'yarn', 'libyaml-dev', 'pkg-config', 'gcc', 'make']
 
 [phases.install]
-cmds = ['bundle config build.psych --with-libyaml-dir=/nix/store/*libyaml*', 'bundle install']
+cmds = ['bundle install --without development test']
 
 [phases.build]
 cmds = [
-  'bundle exec rails assets:precompile',
-  'bundle exec rails db:mongoid:create_indexes'
+  'bundle exec rails assets:precompile'
 ]
 
 [start]

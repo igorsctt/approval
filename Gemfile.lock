@@ -114,46 +114,7 @@ GEM
       mongoid
     date (3.4.1)
     diff-lcs (1.6.2)
-    dotenv (3.1.8)
-    dotenv-rails (3.1.8)
-      dotenv (= 3.1.8)
-      railties (>= 6.1)
     drb (2.2.3)
-    dry-configurable (1.3.0)
-      dry-core (~> 1.1)
-      zeitwerk (~> 2.6)
-    dry-core (1.1.0)
-      concurrent-ruby (~> 1.0)
-      logger
-      zeitwerk (~> 2.6)
-    dry-inflector (1.2.0)
-    dry-initializer (3.2.0)
-    dry-logic (1.6.0)
-      bigdecimal
-      concurrent-ruby (~> 1.0)
-      dry-core (~> 1.1)
-      zeitwerk (~> 2.6)
-    dry-schema (1.14.1)
-      concurrent-ruby (~> 1.0)
-      dry-configurable (~> 1.0, >= 1.0.1)
-      dry-core (~> 1.1)
-      dry-initializer (~> 3.2)
-      dry-logic (~> 1.5)
-      dry-types (~> 1.8)
-      zeitwerk (~> 2.6)
-    dry-types (1.8.3)
-      bigdecimal (~> 3.0)
-      concurrent-ruby (~> 1.0)
-      dry-core (~> 1.0)
-      dry-inflector (~> 1.0)
-      dry-logic (~> 1.4)
-      zeitwerk (~> 2.6)
-    dry-validation (1.11.1)
-      concurrent-ruby (~> 1.0)
-      dry-core (~> 1.1)
-      dry-initializer (~> 3.2)
-      dry-schema (~> 1.14)
-      zeitwerk (~> 2.6)
     erb (4.0.4)
       cgi (>= 0.3.3)
     erubi (1.13.1)
@@ -165,14 +126,7 @@ GEM
       railties (>= 6.1.0)
     faker (3.5.2)
       i18n (>= 1.8.11, < 2)
-    ffi (1.17.2-aarch64-linux-gnu)
-    ffi (1.17.2-aarch64-linux-musl)
-    ffi (1.17.2-arm-linux-gnu)
-    ffi (1.17.2-arm-linux-musl)
-    ffi (1.17.2-arm64-darwin)
-    ffi (1.17.2-x86_64-darwin)
     ffi (1.17.2-x86_64-linux-gnu)
-    ffi (1.17.2-x86_64-linux-musl)
     geoip (1.6.4)
     globalid (1.2.1)
       activesupport (>= 6.1)
@@ -258,21 +212,7 @@ GEM
     net-smtp (0.5.1)
       net-protocol
     nio4r (2.7.4)
-    nokogiri (1.18.8-aarch64-linux-gnu)
-      racc (~> 1.4)
-    nokogiri (1.18.8-aarch64-linux-musl)
-      racc (~> 1.4)
-    nokogiri (1.18.8-arm-linux-gnu)
-      racc (~> 1.4)
-    nokogiri (1.18.8-arm-linux-musl)
-      racc (~> 1.4)
-    nokogiri (1.18.8-arm64-darwin)
-      racc (~> 1.4)
-    nokogiri (1.18.8-x86_64-darwin)
-      racc (~> 1.4)
     nokogiri (1.18.8-x86_64-linux-gnu)
-      racc (~> 1.4)
-    nokogiri (1.18.8-x86_64-linux-musl)
       racc (~> 1.4)
     parallel (1.27.0)
     parser (3.3.8.0)
@@ -282,8 +222,7 @@ GEM
       prettyprint
     prettyprint (0.2.0)
     prism (1.4.0)
-    psych (5.2.6)
-      date
+    psych (4.0.6)
       stringio
     public_suffix (6.0.2)
     puma (6.6.0)
@@ -340,7 +279,7 @@ GEM
     rb-fsevent (0.11.2)
     rb-inotify (0.11.1)
       ffi (~> 1.0)
-    rdoc (6.14.1)
+    rdoc (6.14.2)
       erb
       psych (>= 4.0.0)
     redis (5.4.0)
@@ -396,6 +335,7 @@ GEM
       logger
     ruby2_keywords (0.0.5)
     rubyzip (2.4.1)
+    safe_yaml (1.0.5)
     sass-rails (6.0.0)
       sassc-rails (~> 2.1, >= 2.1.1)
     sassc (2.4.0)
@@ -434,13 +374,7 @@ GEM
     tailwindcss-rails (4.2.3)
       railties (>= 7.0.0)
       tailwindcss-ruby (~> 4.0)
-    tailwindcss-ruby (4.1.11)
-    tailwindcss-ruby (4.1.11-aarch64-linux-gnu)
-    tailwindcss-ruby (4.1.11-aarch64-linux-musl)
-    tailwindcss-ruby (4.1.11-arm64-darwin)
-    tailwindcss-ruby (4.1.11-x86_64-darwin)
     tailwindcss-ruby (4.1.11-x86_64-linux-gnu)
-    tailwindcss-ruby (4.1.11-x86_64-linux-musl)
     terser (1.2.6)
       execjs (>= 0.3.0, < 3)
     thor (1.3.2)
@@ -479,14 +413,7 @@ GEM
     zeitwerk (2.6.18)
 
 PLATFORMS
-  aarch64-linux-gnu
-  aarch64-linux-musl
-  arm-linux-gnu
-  arm-linux-musl
-  arm64-darwin
-  x86_64-darwin
-  x86_64-linux-gnu
-  x86_64-linux-musl
+  x86_64-linux
 
 DEPENDENCIES
   active_model_serializers
@@ -496,8 +423,6 @@ DEPENDENCIES
   byebug
   capybara (>= 3.26)
   database_cleaner-mongoid
-  dotenv-rails
-  dry-validation
   factory_bot_rails
   faker
   geoip
@@ -510,6 +435,7 @@ DEPENDENCIES
   lograge
   mail
   mongoid (~> 8.1)
+  psych (~> 4.0)
   puma (~> 6.0)
   rack-cors
   rails (~> 7.2.0)
@@ -517,6 +443,7 @@ DEPENDENCIES
   rspec-rails
   rubocop
   rubocop-rails
+  safe_yaml
   sass-rails (>= 6)
   selenium-webdriver
   sinatra (~> 4.1)
@@ -534,4 +461,4 @@ RUBY VERSION
    ruby 3.1.4p223
 
 BUNDLED WITH
-   2.6.9
+   2.4.19

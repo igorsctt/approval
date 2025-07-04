@@ -1,10 +1,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '~> 3.1'
-
-# Fix for Railway deployment - use platform-specific gems
-gem 'psych', '~> 5.0', platforms: :ruby
+ruby '3.1.4'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
 gem 'rails', '~> 7.2.0'
@@ -42,6 +39,12 @@ gem 'bcrypt', '~> 3.1.7'
 # JWT for authentication
 gem 'jwt'
 
+# Force older psych version that works better
+gem 'psych', '~> 4.0'
+
+# YAML processing (alternative to problematic psych)
+gem 'safe_yaml'
+
 # CORS handling
 gem 'rack-cors'
 
@@ -55,13 +58,13 @@ gem 'httparty'
 gem 'geoip'
 
 # Environment variables
-gem 'dotenv-rails'
+# gem 'dotenv-rails'  # Temporariamente removido
 
 # Pagination
 gem 'kaminari'
 
 # Validation
-gem 'dry-validation'
+# gem 'dry-validation'  # Temporariamente removido
 
 # Serializers
 gem 'active_model_serializers'
