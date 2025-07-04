@@ -1,0 +1,16 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+/* Custom KAEFER styles for approval system */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.kaefer-header {
+  background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+}
+
+.kaefer-card {
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
