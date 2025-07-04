@@ -1,0 +1,153 @@
+<div class="bg-white shadow-lg rounded-lg p-8">
+  <% if @approval && @approval['can_be_processed'] %>
+    <div class="text-center mb-6">
+      <h3 class="text-xl font-bold text-gray-900 mb-2">Approval Request</h3>
+      <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <p class="text-sm text-blue-800">
+          <strong>Status:</strong> 
+          <span class="capitalize px-2 py-1 text-xs font-medium bg-yellow-100 text-yellow-800 rounded-full">
+            <%= @approval['status'] %>
+          </span>
+        </p>
+      </div>
+    </div>
+
+    <div class="mb-6">
+      <h4 class="text-lg font-semibold text-gray-800 mb-3">Request Details</h4>
+      <div class="bg-gray-50 rounded-lg p-4 space-y-3">
+        <div>
+          <span class="text-sm font-medium text-gray-600">Description:</span>
+          <p class="text-gray-900 mt-1"><%= @approval['description'] %></p>
+        </div>
+        
+        <div>
+          <span class="text-sm font-medium text-gray-600">Action ID:</span>
+          <p class="text-gray-900 mt-1"><%= @approval['action_id'] %></p>
+        </div>
+        
+        <div>
+          <span class="text-sm font-medium text-gray-600">Requested For:</span>
+          <p class="text-gray-900 mt-1"><%= @approval['email'] %></p>
+        </div>
+        
+        <% if @approval['expire_at'] %>
+          <div>
+            <span class="text-sm font-medium text-gray-600">Expires:</span>
+            <p class="text-gray-900 mt-1"><%= Time.parse(@approval['expire_at']).strftime('%B %d, %Y at %I:%M %p UTC') %></p>
+          </div>
+        <% end %>
+        
+        <% if @approval['time_remaining'] && @approval['time_remaining'] > 0 %>
+          <div>
+            <span class="text-sm font-medium text-gray-600">Time Remaining:</span>
+            <p class="text-gray-900 mt-1">
+              <% 
+                hours = @approval['time_remaining'] / 3600
+                minutes = (@approval['time_remaining'] % 3600) / 60
+              %>
+              <% if hours > 0 %>
+                <%= hours %> hour<%= 's' if hours != 1 %>
+              <% elsif minutes > 0 %>
+                <%= minutes %> minute<%= 's' if minutes != 1 %>
+              <% else %>
+                Less than a minute
+              <% end %>
+            </p>
+          </div>
+        <% end %>
+        
+        <% if @approval['details'].present? %>
+          <div>
+            <span class="text-sm font-medium text-gray-600">Additional Details:</span>
+            <div class="mt-2 space-y-1">
+              <% @approval['details'].each do |key, value| %>
+                <div class="flex justify-between">
+                  <span class="text-sm text-gray-600"><%= key.humanize %>:</span>
+                  <span class="text-sm text-gray-900"><%= value %></span>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <%= form_with url: approve_path, method: :post, local: true, class: "space-y-4" do |form| %>
+      <%= form.hidden_field :token, value: @token %>
+      
+      <div>
+        <%= form.label :signature, "Your Name/Signature", class: "block text-sm font-medium text-gray-700 mb-2" %>
+        <%= form.text_field :signature, required: true, placeholder: "Enter your full name", 
+            class: "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" %>
+      </div>
+      
+      <div>
+        <%= form.label :reason, "Reason/Comments (optional for rejection)", class: "block text-sm font-medium text-gray-700 mb-2" %>
+        <%= form.text_area :reason, rows: 3, placeholder: "Enter any additional comments or reason for rejection", 
+            class: "w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" %>
+      </div>
+      
+      <div class="flex space-x-4">
+        <%= form.submit "Approve", 
+            name: "action_type", 
+            value: "approve", 
+            class: "flex-1 bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-150 ease-in-out",
+            onclick: "return confirm('Are you sure you want to approve this request?')" %>
+        
+        <%= form.submit "Reject", 
+            name: "action_type", 
+            value: "reject", 
+            class: "flex-1 bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition duration-150 ease-in-out",
+            onclick: "return confirm('Are you sure you want to reject this request?')" %>
+      </div>
+    <% end %>
+    
+    <div class="mt-6 text-center">
+      <p class="text-xs text-gray-500">
+        This approval link is secure and unique to you. Do not share it with others.
+      </p>
+    </div>
+    
+  <% elsif @approval && !@approval['can_be_processed'] %>
+    <div class="text-center">
+      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+        <h3 class="text-lg font-bold mb-2">Request No Longer Available</h3>
+        <% if @approval['status'] == 'approved' %>
+          <p>This approval request has already been <strong>approved</strong>.</p>
+        <% elsif @approval['status'] == 'rejected' %>
+          <p>This approval request has already been <strong>rejected</strong>.</p>
+        <% elsif @approval['status'] == 'expired' %>
+          <p>This approval request has <strong>expired</strong>.</p>
+        <% else %>
+          <p>This approval request is no longer available for processing.</p>
+        <% end %>
+      </div>
+      
+      <div class="mt-6 bg-gray-50 rounded-lg p-4">
+        <h4 class="font-semibold text-gray-800 mb-2">Request Details</h4>
+        <div class="text-sm space-y-1">
+          <p><strong>Description:</strong> <%= @approval['description'] %></p>
+          <p><strong>Action ID:</strong> <%= @approval['action_id'] %></p>
+          <p><strong>Status:</strong> 
+            <span class="capitalize px-2 py-1 text-xs font-medium bg-gray-100 text-gray-800 rounded-full">
+              <%= @approval['status'] %>
+            </span>
+          </p>
+          <% if @approval['signature'].present? %>
+            <p><strong>Processed by:</strong> <%= @approval['signature'] %></p>
+          <% end %>
+          <% if @approval['processed_at'] %>
+            <p><strong>Processed on:</strong> <%= Time.parse(@approval['processed_at']).strftime('%B %d, %Y at %I:%M %p UTC') %></p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% else %>
+    <div class="text-center">
+      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+        <h3 class="text-lg font-bold mb-2">Invalid Approval Link</h3>
+        <p>This approval link is invalid or has expired.</p>
+      </div>
+    </div>
+  <% end %>
+</div>

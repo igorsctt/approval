@@ -1,0 +1,134 @@
+<div class="header">
+  <h1>Sistema de Aprovação de Workflows</h1>
+  <p>Gerencie solicitações de aprovação de forma simples e eficiente</p>
+</div>
+
+<div class="container">
+  <div class="grid">
+    <div class="card">
+      <h3>📊 Estatísticas</h3>
+      <div class="stats">
+        <div class="stat-item">
+          <strong><%= @total_approvals %></strong>
+          <span>Total de Solicitações</span>
+        </div>
+        <div class="stat-item">
+          <strong><%= @pending_approvals %></strong>
+          <span>Pendentes</span>
+        </div>
+        <div class="stat-item">
+          <strong><%= @approved_approvals %></strong>
+          <span>Aprovadas</span>
+        </div>
+        <div class="stat-item">
+          <strong><%= @rejected_approvals %></strong>
+          <span>Rejeitadas</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>🚀 Ações Rápidas</h3>
+      <div class="actions">
+        <%= link_to 'Nova Solicitação', new_approval_path, class: 'btn btn-success' %>
+        <%= link_to 'Ver Todas', approvals_path, class: 'btn' %>
+        <%= link_to 'API Docs', '/health', class: 'btn' %>
+      </div>
+    </div>
+  </div>
+
+  <% if @recent_approvals.any? %>
+    <div class="card">
+      <h3>📋 Solicitações Recentes</h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>ID da Ação</th>
+            <th>Descrição</th>
+            <th>Status</th>
+            <th>Solicitante</th>
+            <th>Criado em</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @recent_approvals.each do |approval| %>
+            <tr>
+              <td><%= approval.action_id %></td>
+              <td><%= truncate(approval.description, length: 50) %></td>
+              <td>
+                <span class="status status-<%= approval.status %>">
+                  <%= approval.status.humanize %>
+                </span>
+              </td>
+              <td><%= approval.requester_email %></td>
+              <td><%= time_ago_in_words(approval.created_at) %> atrás</td>
+              <td>
+                <%= link_to 'Ver', approval_path(approval), class: 'btn btn-sm' %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div class="card text-center">
+      <h3>📝 Nenhuma solicitação encontrada</h3>
+      <p class="text-muted">Comece criando sua primeira solicitação de aprovação.</p>
+      <%= link_to 'Criar Solicitação', new_approval_path, class: 'btn btn-success' %>
+    </div>
+  <% end %>
+</div>
+
+<style>
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.stat-item {
+  text-align: center;
+  padding: 1rem;
+  background: #f8f9fa;
+  border-radius: 4px;
+}
+
+.stat-item strong {
+  display: block;
+  font-size: 2rem;
+  color: #2c3e50;
+}
+
+.stat-item span {
+  color: #6c757d;
+  font-size: 0.875rem;
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.btn-sm {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.875rem;
+}
+
+@media (max-width: 768px) {
+  .actions {
+    flex-direction: column;
+  }
+  
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .table {
+    font-size: 0.875rem;
+  }
+}
+</style>

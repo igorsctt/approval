@@ -1,0 +1,14 @@
+# This file is not used since we're using MongoDB with Mongoid
+# But Rails may expect it to exist
+
+default: &default
+  adapter: nulldb
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+
+production:
+  <<: *default

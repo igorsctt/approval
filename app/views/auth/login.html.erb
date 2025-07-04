@@ -1,0 +1,38 @@
+<div class="kaefer-logo">
+  <div class="logo-icon">K</div>
+  <div class="kaefer-brand">KAEFER</div>
+</div>
+
+<%= form_with url: '/authenticate', method: :post, local: true, id: 'login-form' do |form| %>
+  <div class="form-group">
+    <label for="email">Email</label>
+    <%= form.email_field :email, 
+        placeholder: 'seu@email.com', 
+        required: true,
+        value: params[:email] %>
+  </div>
+  
+  <div class="form-group">
+    <label for="password">Senha</label>
+    <%= form.password_field :password, 
+        placeholder: '••••••••', 
+        required: true %>
+  </div>
+  
+  <%= form.submit 'Entrar', class: 'login-btn', id: 'login-submit' %>
+<% end %>
+
+<div class="login-help">
+  <strong>Credenciais de Teste:</strong><br>
+  <span style="font-size: 0.9em;">
+    <strong>Admin:</strong> admin@kaefer.com / admin123<br>
+    <strong>Usuário:</strong> usuario@kaefer.com / user123
+  </span>
+</div>
+
+<script>
+  document.getElementById('login-form').addEventListener('submit', function() {
+    const submitBtn = document.getElementById('login-submit');
+    submitBtn.textContent = 'Entrando...';
+  });
+</script>

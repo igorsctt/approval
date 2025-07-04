@@ -1,0 +1,450 @@
+<style>
+/* Container principal */
+.main-container {
+  padding: 0;
+  margin: 0;
+}
+
+.content-wrapper {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+/* Layout desktop com duas colunas */
+@media (min-width: 1024px) {
+  .content-wrapper {
+    grid-template-columns: 2fr 1fr;
+    padding: 2rem;
+  }
+  
+  .info-card {
+    position: sticky;
+    top: 2rem;
+  }
+}
+
+/* Melhorias para telas extra grandes */
+@media (min-width: 1440px) {
+  .content-wrapper {
+    max-width: 1400px;
+    padding: 3rem 2rem;
+  }
+}
+
+/* Card principal */
+.form-card {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  border: 1px solid #e0e6ed;
+  margin-bottom: 2rem;
+}
+
+/* Cabeçalho */
+.page-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.page-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.page-subtitle {
+  color: #6b7280;
+  font-size: 16px;
+  margin: 0;
+}
+
+/* Formulário */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-label {
+  display: block;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.5rem;
+  font-size: 14px;
+}
+
+.required::after {
+  content: " *";
+  color: #dc2626;
+}
+
+.form-input,
+.form-textarea,
+.form-select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: all 0.2s;
+  background: white;
+  box-sizing: border-box;
+}
+
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 100px;
+  font-family: inherit;
+}
+
+.form-help {
+  display: block;
+  margin-top: 0.25rem;
+  color: #6b7280;
+  font-size: 12px;
+}
+
+/* Grid layout */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+/* Detalhes adicionais */
+.details-section {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+  background: #f9fafb;
+}
+
+.details-legend {
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 1rem;
+  font-size: 16px;
+}
+
+.detail-item {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  align-items: flex-start;
+}
+
+.detail-item input {
+  margin-bottom: 0;
+}
+
+.btn-remove {
+  background: #dc2626;
+  color: white;
+  border: none;
+  padding: 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s;
+  min-width: 40px;
+}
+
+.btn-remove:hover {
+  background: #b91c1c;
+}
+
+.btn-add {
+  background: #16a34a;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  transition: background 0.2s;
+  margin-top: 0.5rem;
+}
+
+.btn-add:hover {
+  background: #15803d;
+}
+
+/* Botões de ação */
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.btn {
+  padding: 0.75rem 2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.btn-primary {
+  background: #3b82f6;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #2563eb;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: #6b7280;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: #4b5563;
+}
+
+/* Alert de erro */
+.alert-error {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-left: 4px solid #dc2626;
+  color: #991b1b;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.alert-error h4 {
+  margin: 0 0 0.5rem 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.alert-error ul {
+  margin: 0;
+  padding-left: 1.5rem;
+}
+
+.alert-error li {
+  margin-bottom: 0.25rem;
+  font-size: 13px;
+}
+
+/* Card de instruções */
+.info-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border: 1px solid #e0e6ed;
+}
+
+.info-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.info-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.info-list li {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #f3f4f6;
+  font-size: 14px;
+  color: #4b5563;
+}
+
+.info-list li:last-child {
+  border-bottom: none;
+}
+
+.info-list strong {
+  color: #1f2937;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .content-wrapper {
+    padding: 1rem;
+    grid-template-columns: 1fr;
+  }
+  
+  .form-card {
+    padding: 1.5rem;
+  }
+  
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .detail-item {
+    flex-direction: column;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+  }
+  
+  .btn {
+    width: 100%;
+    text-align: center;
+  }
+  
+  .page-title {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .content-wrapper {
+    padding: 0.5rem;
+  }
+  
+  .form-card {
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+}
+</style>
+
+<div class="content-wrapper">
+  <div class="form-card">
+    <div class="page-header">
+      <h1 class="page-title">
+        ➕ Nova Solicitação de Aprovação
+      </h1>
+      <p class="page-subtitle">Crie uma nova solicitação de aprovação para o sistema KAEFER</p>
+    </div>
+
+    <%= form_with model: @approval, local: true, data: { validate: true } do |form| %>
+      <% if @approval.errors.any? %>
+        <div class="alert-error">
+          <h4><%= pluralize(@approval.errors.count, "erro") %> impediram que a solicitação fosse salva:</h4>
+          <ul>
+            <% @approval.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="form-group">
+        <%= form.label :action_id, "ID da Ação", class: "form-label required" %>
+        <%= form.text_field :action_id, required: true, placeholder: "Ex: REQ-001, PURCHASE-123", class: "form-input" %>
+        <small class="form-help">Identificador único para esta solicitação</small>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :description, "Descrição", class: "form-label required" %>
+        <%= form.text_area :description, required: true, placeholder: "Descreva detalhadamente o que precisa ser aprovado...", class: "form-textarea" %>
+        <small class="form-help">Descreva claramente o que precisa ser aprovado (mínimo 10 caracteres)</small>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <%= form.label :requester_email, "Email do Solicitante", class: "form-label required" %>
+          <%= form.email_field :requester_email, required: true, placeholder: "solicitante@kaefer.com", class: "form-input" %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :approver_email, "Email do Aprovador", class: "form-label required" %>
+          <%= form.email_field :approver_email, required: true, placeholder: "aprovador@kaefer.com", class: "form-input" %>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <%= form.label :callback_url, "URL de Callback (opcional)", class: "form-label" %>
+        <%= form.url_field :callback_url, placeholder: "https://sistema.kaefer.com/callback", class: "form-input" %>
+        <small class="form-help">URL que será chamada após a aprovação/rejeição</small>
+      </div>
+
+      <div class="details-section">
+        <div class="details-legend">Detalhes Adicionais (opcional)</div>
+        
+        <div id="details-container">
+          <!-- Items serão adicionados via JavaScript -->
+        </div>
+        
+        <button type="button" onclick="addDetailItem()" class="btn-add">
+          + Adicionar Detalhe
+        </button>
+      </div>
+
+      <div class="form-actions">
+        <%= form.submit "Criar Solicitação", class: "btn btn-primary" %>
+        <%= link_to "Cancelar", approvals_path, class: "btn btn-secondary" %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="info-card">
+    <h3 class="info-title">ℹ️ Como Funciona</h3>
+    <ol class="info-list">
+      <li><strong>Preencha o formulário</strong> com os dados da solicitação</li>
+      <li><strong>Email será enviado</strong> para o aprovador automaticamente</li>
+      <li><strong>Aprovador clica no link</strong> no email para aprovar/rejeitar</li>
+      <li><strong>Sistema notifica</strong> o resultado via email e callback (se configurado)</li>
+    </ol>
+  </div>
+</div>
+
+<script>
+function addDetailItem() {
+  const container = document.getElementById('details-container');
+  const div = document.createElement('div');
+  div.className = 'detail-item';
+  
+  div.innerHTML = `
+    <input type="text" name="approval[details_keys][]" placeholder="Chave (ex: valor, departamento)" class="form-input" style="flex: 1;">
+    <input type="text" name="approval[details_values][]" placeholder="Valor correspondente" class="form-input" style="flex: 2;">
+    <button type="button" onclick="removeDetailItem(this)" class="btn-remove">×</button>
+  `;
+  
+  container.appendChild(div);
+}
+
+function removeDetailItem(button) {
+  button.parentElement.remove();
+}
+
+// Add initial detail item
+document.addEventListener('DOMContentLoaded', function() {
+  // Clear the container first
+  document.getElementById('details-container').innerHTML = '';
+  addDetailItem();
+});
+</script>

@@ -1,0 +1,168 @@
+<div class="header">
+  <h1>📋 Solicitação de Aprovação</h1>
+  <p>Detalhes da solicitação <%= @approval.action_id %></p>
+</div>
+
+<div class="container">
+  <div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+      <h2>Detalhes da Solicitação</h2>
+      <span class="status status-<%= @approval.status %>">
+        <%= @approval.status.humanize %>
+      </span>
+    </div>
+
+    <div class="approval-details">
+      <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+        <div>
+          <h4>📄 Informações Básicas</h4>
+          <p><strong>ID da Ação:</strong> <%= @approval.action_id %></p>
+          <p><strong>Descrição:</strong> <%= @approval.description %></p>
+          <p><strong>Status:</strong> 
+            <span class="status status-<%= @approval.status %>">
+              <%= @approval.status.humanize %>
+            </span>
+          </p>
+        </div>
+
+        <div>
+          <h4>👥 Pessoas Envolvidas</h4>
+          <p><strong>Solicitante:</strong> <%= @approval.requester_email %></p>
+          <p><strong>Aprovador:</strong> <%= @approval.approver_email %></p>
+          <% if @approval.callback_url.present? %>
+            <p><strong>URL de Callback:</strong> 
+              <a href="<%= @approval.callback_url %>" target="_blank" rel="noopener">
+                <%= truncate(@approval.callback_url, length: 50) %>
+              </a>
+            </p>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); margin-top: 2rem;">
+        <div>
+          <h4>⏰ Datas Importantes</h4>
+          <p><strong>Criado em:</strong> <%= @approval.created_at.strftime('%d/%m/%Y às %H:%M') %></p>
+          <% if @approval.expire_at %>
+            <p><strong>Expira em:</strong> 
+              <%= @approval.expire_at.strftime('%d/%m/%Y às %H:%M') %>
+              <% if @approval.expire_at < Time.current %>
+                <span class="text-danger">(Expirada)</span>
+              <% end %>
+            </p>
+          <% end %>
+          <% if @approval.processed_at %>
+            <p><strong>Processado em:</strong> <%= @approval.processed_at.strftime('%d/%m/%Y às %H:%M') %></p>
+          <% end %>
+        </div>
+
+        <div>
+          <h4>🌐 Informações Técnicas</h4>
+          <% if @approval.ip_address %>
+            <p><strong>IP:</strong> <%= @approval.ip_address %></p>
+          <% end %>
+          <% if @approval.user_agent %>
+            <p><strong>User Agent:</strong> <%= truncate(@approval.user_agent, length: 50) %></p>
+          <% end %>
+          <% if @approval.location %>
+            <p><strong>Localização:</strong> <%= @approval.location %></p>
+          <% end %>
+        </div>
+      </div>
+
+      <% if @approval.details.present? && @approval.details.any? %>
+        <div style="margin-top: 2rem;">
+          <h4>📝 Detalhes Adicionais</h4>
+          <div class="approval-details">
+            <% @approval.details.each do |key, value| %>
+              <p><strong><%= key.humanize %>:</strong> <%= value %></p>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <% if @approval.status == 'pending' %>
+      <div class="approval-actions">
+        <%= link_to '✅ Aprovar', approve_approval_path(@approval), 
+            method: :patch, 
+            class: 'btn btn-success',
+            data: { confirm: 'Tem certeza que deseja APROVAR esta solicitação?' } %>
+        
+        <%= link_to '❌ Rejeitar', reject_approval_path(@approval), 
+            method: :patch, 
+            class: 'btn btn-danger',
+            data: { confirm: 'Tem certeza que deseja REJEITAR esta solicitação?' } %>
+      </div>
+    <% elsif @approval.status == 'approved' %>
+      <div class="alert alert-success text-center">
+        <h4>✅ Solicitação Aprovada!</h4>
+        <p>Esta solicitação foi aprovada em <%= @approval.processed_at.strftime('%d/%m/%Y às %H:%M') %>.</p>
+      </div>
+    <% elsif @approval.status == 'rejected' %>
+      <div class="alert alert-error text-center">
+        <h4>❌ Solicitação Rejeitada</h4>
+        <p>Esta solicitação foi rejeitada em <%= @approval.processed_at.strftime('%d/%m/%Y às %H:%M') %>.</p>
+      </div>
+    <% elsif @approval.status == 'expired' %>
+      <div class="alert alert-error text-center">
+        <h4>⏰ Solicitação Expirada</h4>
+        <p>Esta solicitação expirou em <%= @approval.expire_at.strftime('%d/%m/%Y às %H:%M') %>.</p>
+      </div>
+    <% end %>
+
+    <div style="margin-top: 2rem; text-align: center;">
+      <%= link_to '← Voltar para Lista', approvals_path, class: 'btn' %>
+      <%= link_to '🏠 Página Inicial', root_path, class: 'btn' %>
+    </div>
+  </div>
+</div>
+
+<style>
+.approval-details {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.approval-details h4 {
+  margin-top: 0;
+  color: #495057;
+  border-bottom: 2px solid #dee2e6;
+  padding-bottom: 0.5rem;
+}
+
+.approval-details p {
+  margin-bottom: 0.75rem;
+  line-height: 1.6;
+}
+
+.approval-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin: 2rem 0;
+  padding: 2rem;
+  background: #fff;
+  border: 2px dashed #dee2e6;
+  border-radius: 8px;
+}
+
+.text-danger {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .approval-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .approval-actions .btn {
+    width: 100%;
+    max-width: 200px;
+  }
+}
+</style>

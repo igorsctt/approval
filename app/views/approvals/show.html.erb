@@ -1,0 +1,644 @@
+<style>
+.approval-detail-page {
+  min-height: 100vh;
+  background: #f8fafc;
+  padding: 2rem 0;
+}
+
+.detail-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 2rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border: 1px solid #e0e6ed;
+}
+
+.detail-header h1 {
+  color: #1f2937;
+  margin-bottom: 0.5rem;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.detail-header p {
+  color: #6b7280;
+  font-size: 1rem;
+}
+
+.approval-detail-card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border: 1px solid #e0e6ed;
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.card-header {
+  background: #f8f9fa;
+  color: #1f2937;
+  padding: 1.25rem;
+  border-bottom: 1px solid #f1f3f4;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.status-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-pending {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.status-approved {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.status-rejected {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+.status-expired {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.card-body {
+  padding: 2rem;
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.info-section {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border-left: 4px solid #667eea;
+}
+
+.info-section h4 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.info-section p {
+  margin-bottom: 0.75rem;
+  line-height: 1.6;
+  color: #495057;
+}
+
+.info-section strong {
+  color: #2c3e50;
+}
+
+.approval-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin: 2rem 0;
+  padding: 1.5rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border: 1px solid #e0e6ed;
+}
+
+.alert {
+  padding: 1.5rem;
+  border-radius: 8px;
+  text-align: center;
+  margin: 1rem 0;
+}
+
+.alert-success {
+  background: #dcfce7;
+  color: #15803d;
+  border: 1px solid #bbf7d0;
+}
+
+.alert-error {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+.alert h4 {
+  margin-bottom: 0.5rem;
+  font-size: 1.3rem;
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.btn-success {
+  background: #16a34a;
+  color: white;
+}
+
+.btn-success:hover {
+  background: #15803d;
+}
+
+.btn-danger {
+  background: #dc2626;
+  color: white;
+}
+
+.btn-danger:hover {
+  background: #b91c1c;
+}
+
+.btn-secondary {
+  background: #f3f4f6;
+  color: #6b7280;
+  border: 1px solid #d1d5db;
+}
+
+.btn-secondary:hover {
+  background: #e5e7eb;
+}
+
+.btn-primary {
+  background: #3b82f6;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #2563eb;
+}
+
+.navigation-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin: 2rem 0;
+}
+
+.footer {
+  background: #2c3e50;
+  color: white;
+  text-align: center;
+  padding: 2rem;
+  margin-top: 3rem;
+}
+
+.footer p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+/* Modal Styles */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 5% auto;
+  padding: 0;
+  border: none;
+  width: 90%;
+  max-width: 500px;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+  from { transform: translateY(-50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-header {
+  background: #3b82f6;
+  color: white;
+  padding: 1.5rem;
+  border-radius: 8px 8px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 1.3rem;
+}
+
+.close {
+  color: white;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.close:hover {
+  opacity: 0.7;
+}
+
+.modal-body {
+  padding: 2rem;
+}
+
+.modal-body p {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+  color: #495057;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.form-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #e9ecef;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-group textarea:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.modal-footer {
+  padding: 1.5rem;
+  border-top: 1px solid #e9ecef;
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.btn-modal-cancel {
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-modal-cancel:hover {
+  background: #5a6268;
+}
+
+@media (max-width: 768px) {
+  .approval-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .approval-actions .btn {
+    width: 100%;
+    max-width: 200px;
+  }
+  
+  .navigation-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .navigation-buttons .btn {
+    width: 100%;
+    max-width: 200px;
+  }
+  
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+}
+</style>
+
+<div class="approval-detail-page">
+  <div class="container">
+    <div class="detail-header">
+      <h1>📋 Detalhes da Solicitação</h1>
+      <p>Código: <strong><%= @approval.action_id || @approval.id.to_s %></strong></p>
+    </div>
+
+    <div class="approval-detail-card">
+      <div class="card-header">
+        <h2>Informações da Solicitação</h2>
+        <span class="status-badge status-<%= @approval.status %>">
+          <% case @approval.status %>
+          <% when 'pending' %>
+            🕐 Pendente
+          <% when 'approved' %>
+            ✅ Aprovado
+          <% when 'rejected' %>
+            ❌ Rejeitado
+          <% when 'expired' %>
+            ⏰ Expirado
+          <% end %>
+        </span>
+      </div>
+
+      <div class="card-body">
+        <div class="info-grid">
+          <div class="info-section">
+            <h4>📄 Informações Básicas</h4>
+            <p><strong>Código:</strong> <%= @approval.action_id || @approval.id.to_s %></p>
+            <p><strong>Descrição:</strong> <%= @approval.description %></p>
+            <% if @approval.requested_by %>
+              <p><strong>Solicitante:</strong> <%= @approval.requested_by %></p>
+            <% end %>
+            <% if @approval.requested_by_email %>
+              <p><strong>Email do Solicitante:</strong> <%= @approval.requested_by_email %></p>
+            <% end %>
+          </div>
+
+          <div class="info-section">
+            <h4>� Informações Financeiras</h4>
+            <% if @approval.amount %>
+              <p><strong>Valor:</strong> R$ <%= number_with_precision(@approval.amount, precision: 2, delimiter: '.', separator: ',') %></p>
+            <% end %>
+            <% if @approval.category %>
+              <p><strong>Categoria:</strong> <%= @approval.category %></p>
+            <% end %>
+            <% if @approval.priority %>
+              <p><strong>Prioridade:</strong> 
+                <span class="priority-<%= @approval.priority %>">
+                  <%= @approval.priority.humanize %>
+                </span>
+              </p>
+            <% end %>
+          </div>
+
+          <div class="info-section">
+            <h4>⏰ Cronologia</h4>
+            <p><strong>Criado em:</strong> <%= @approval.created_at.strftime('%d/%m/%Y às %H:%M') %></p>
+            <% if @approval.expire_at %>
+              <p><strong>Expira em:</strong> 
+                <%= @approval.expire_at.strftime('%d/%m/%Y às %H:%M') %>
+                <% if @approval.expire_at < Time.current %>
+                  <span style="color: #d63031; font-weight: bold;">(Expirada)</span>
+                <% end %>
+              </p>
+            <% end %>
+            <% if @approval.processed_at %>
+              <p><strong>Processado em:</strong> <%= @approval.processed_at.strftime('%d/%m/%Y às %H:%M') %></p>
+            <% end %>
+          </div>
+
+          <div class="info-section">
+            <h4>👥 Pessoas Envolvidas</h4>
+            <% if @approval.requester_email %>
+              <p><strong>Solicitante:</strong> <%= @approval.requester_email %></p>
+            <% end %>
+            <% if @approval.approver_email %>
+              <p><strong>Aprovador:</strong> <%= @approval.approver_email %></p>
+            <% end %>
+            <% if @approval.email %>
+              <p><strong>Email Principal:</strong> <%= @approval.email %></p>
+            <% end %>
+          </div>
+        </div>
+
+        <% if @approval.details.present? && @approval.details.any? %>
+          <div class="info-section">
+            <h4>📝 Detalhes Adicionais</h4>
+            <% @approval.details.each do |key, value| %>
+              <p><strong><%= key.humanize %>:</strong> <%= value %></p>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <% if @approval.status == 'pending' %>
+      <div class="approval-actions">
+        <button class="btn btn-success" onclick="openApprovalModal()">
+          ✅ Aprovar Solicitação
+        </button>
+        
+        <button class="btn btn-danger" onclick="openRejectionModal()">
+          ❌ Rejeitar Solicitação
+        </button>
+      </div>
+    <% elsif @approval.status == 'approved' %>
+      <div class="alert alert-success">
+        <h4>✅ Solicitação Aprovada!</h4>
+        <p>Esta solicitação foi aprovada em <%= @approval.processed_at.strftime('%d/%m/%Y às %H:%M') %>.</p>
+      </div>
+    <% elsif @approval.status == 'rejected' %>
+      <div class="alert alert-error">
+        <h4>❌ Solicitação Rejeitada</h4>
+        <p>Esta solicitação foi rejeitada em <%= @approval.processed_at.strftime('%d/%m/%Y às %H:%M') %>.</p>
+        <% if @approval.rejection_reason.present? %>
+          <div style="margin-top: 1rem; padding: 1rem; background: rgba(255,255,255,0.2); border-radius: 6px;">
+            <strong>Motivo da rejeição:</strong><br>
+            <%= simple_format(@approval.rejection_reason) %>
+          </div>
+        <% end %>
+      </div>
+    <% elsif @approval.status == 'expired' %>
+      <div class="alert alert-error">
+        <h4>⏰ Solicitação Expirada</h4>
+        <p>Esta solicitação expirou em <%= @approval.expire_at.strftime('%d/%m/%Y às %H:%M') %>.</p>
+      </div>
+    <% end %>
+
+    <div class="navigation-buttons">
+      <%= link_to '← Voltar para Lista', approvals_path, class: 'btn btn-secondary' %>
+    </div>
+  </div>
+
+<!-- Modal de Aprovação -->
+<div id="approvalModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>✅ Confirmar Aprovação</h3>
+      <span class="close" onclick="closeApprovalModal()">&times;</span>
+    </div>
+    <div class="modal-body">
+      <p><strong>Você está prestes a APROVAR esta solicitação:</strong></p>
+      <p><strong>Código:</strong> <%= @approval.action_id || @approval.id.to_s %></p>
+      <p><strong>Descrição:</strong> <%= @approval.description %></p>
+      <% if @approval.amount %>
+        <p><strong>Valor:</strong> R$ <%= number_with_precision(@approval.amount, precision: 2, delimiter: '.', separator: ',') %></p>
+      <% end %>
+      <p style="color: #00b894; font-weight: bold;">⚠️ Esta ação não pode ser desfeita!</p>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-modal-cancel" onclick="closeApprovalModal()">Cancelar</button>
+      <a href="<%= approve_approval_path(@approval) %>" data-method="patch" class="btn btn-success" style="text-decoration: none;">
+        Confirmar Aprovação
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de Rejeição -->
+<div id="rejectionModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3>❌ Confirmar Rejeição</h3>
+      <span class="close" onclick="closeRejectionModal()">&times;</span>
+    </div>
+    <div class="modal-body">
+      <p><strong>Você está prestes a REJEITAR esta solicitação:</strong></p>
+      <p><strong>Código:</strong> <%= @approval.action_id || @approval.id.to_s %></p>
+      <p><strong>Descrição:</strong> <%= @approval.description %></p>
+      <% if @approval.amount %>
+        <p><strong>Valor:</strong> R$ <%= number_with_precision(@approval.amount, precision: 2, delimiter: '.', separator: ',') %></p>
+      <% end %>
+      
+      <form action="<%= reject_approval_path(@approval) %>" method="post" id="rejectionForm">
+        <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+        <input type="hidden" name="_method" value="patch">
+        
+        <div class="form-group">
+          <label for="rejection_reason">Motivo da Rejeição:</label>
+          <textarea name="rejection_reason" id="rejection_reason" 
+                    placeholder="Descreva o motivo da rejeição..." 
+                    required 
+                    style="width: 100%; padding: 0.75rem; border: 2px solid #e9ecef; border-radius: 6px; min-height: 100px; font-family: inherit; resize: vertical;"></textarea>
+        </div>
+        
+        <p style="color: #e17055; font-weight: bold;">⚠️ Esta ação não pode ser desfeita!</p>
+        
+        <div class="modal-footer">
+          <button type="button" class="btn btn-modal-cancel" onclick="closeRejectionModal()">Cancelar</button>
+          <button type="submit" class="btn btn-danger">Confirmar Rejeição</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+// Funções para abrir e fechar modais
+function openApprovalModal() {
+  document.getElementById('approvalModal').style.display = 'block';
+}
+
+function openRejectionModal() {
+  document.getElementById('rejectionModal').style.display = 'block';
+}
+
+function closeApprovalModal() {
+  document.getElementById('approvalModal').style.display = 'none';
+}
+
+function closeRejectionModal() {
+  document.getElementById('rejectionModal').style.display = 'none';
+}
+
+// Fechar modal ao clicar fora
+window.onclick = function(event) {
+  const approvalModal = document.getElementById('approvalModal');
+  const rejectionModal = document.getElementById('rejectionModal');
+  
+  if (event.target === approvalModal) {
+    closeApprovalModal();
+  }
+  
+  if (event.target === rejectionModal) {
+    closeRejectionModal();
+  }
+}
+
+// Fechar modal com ESC
+document.addEventListener('keydown', function(event) {
+  if (event.key === 'Escape') {
+    closeApprovalModal();
+    closeRejectionModal();
+  }
+});
+
+// Rails UJS para método PATCH
+document.addEventListener('DOMContentLoaded', function() {
+  // Adicionar suporte para data-method="patch"
+  document.querySelectorAll('a[data-method="patch"]').forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      
+      const form = document.createElement('form');
+      form.method = 'POST';
+      form.action = this.href;
+      
+      const methodInput = document.createElement('input');
+      methodInput.type = 'hidden';
+      methodInput.name = '_method';
+      methodInput.value = 'patch';
+      form.appendChild(methodInput);
+      
+      const tokenInput = document.createElement('input');
+      tokenInput.type = 'hidden';
+      tokenInput.name = 'authenticity_token';
+      tokenInput.value = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+      form.appendChild(tokenInput);
+      
+      document.body.appendChild(form);
+      form.submit();
+    });
+  });
+});
+</script>
+
+<footer class="footer">
+  <div class="container">
+    <p>&copy; 2025 KAEFER Brasil - Todos os direitos reservados | Sistema de Aprovação de Solicitações</p>
+  </div>
+</footer>

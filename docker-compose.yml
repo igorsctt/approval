@@ -1,0 +1,98 @@
+version: '3.8'
+
+services:
+  # MongoDB database
+  mongodb:
+    image: mongo:7.0
+    container_name: approval_mongodb
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+      - MONGO_INITDB_DATABASE=approval_workflow_development
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - ./docker/mongodb/init:/docker-entrypoint-initdb.d
+    networks:
+      - approval_network
+
+  # Redis for caching and sessions
+  redis:
+    image: redis:7-alpine
+    container_name: approval_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - approval_network
+
+  # MailHog for email testing
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: approval_mailhog
+    ports:
+      - "1025:1025"  # SMTP server
+      - "8025:8025"  # Web interface
+    networks:
+      - approval_network
+
+  # Rails application
+  app:
+    build: .
+    container_name: approval_app
+    depends_on:
+      - mongodb
+      - redis
+      - mailhog
+    environment:
+      - RAILS_ENV=development
+      - MONGODB_URI=mongodb://admin:password@mongodb:27017/approval_workflow_development?authSource=admin
+      - REDIS_URL=redis://redis:6379/1
+      - SMTP_HOST=mailhog
+      - SMTP_PORT=1025
+      - SMTP_USERNAME=test@example.com
+      - SMTP_PASSWORD=
+      - APPROVAL_URL=http://localhost:3000
+      - JWT_SECRET=your-super-secret-jwt-key-change-in-production
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - bundle_cache:/usr/local/bundle
+    networks:
+      - approval_network
+    stdin_open: true
+    tty: true
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails server -b 0.0.0.0"
+
+  # Background jobs (if needed)
+  worker:
+    build: .
+    container_name: approval_worker
+    depends_on:
+      - mongodb
+      - redis
+    environment:
+      - RAILS_ENV=development
+      - MONGODB_URI=mongodb://admin:password@mongodb:27017/approval_workflow_development?authSource=admin
+      - REDIS_URL=redis://redis:6379/1
+    volumes:
+      - .:/app
+      - bundle_cache:/usr/local/bundle
+    networks:
+      - approval_network
+    command: bundle exec rake approval:cleanup_expired
+
+volumes:
+  mongodb_data:
+    driver: local
+  redis_data:
+    driver: local
+  bundle_cache:
+    driver: local
+
+networks:
+  approval_network:
+    driver: bridge

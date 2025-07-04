@@ -1,0 +1,43 @@
+<h2>Approval Request Reminder</h2>
+
+<p>Hello,</p>
+
+<p>This is a reminder that you have a pending approval request that requires your attention.</p>
+
+<div class="warning">
+  <p><strong>Time Sensitive:</strong> This request expires in <%= format_time_remaining(@time_remaining) %>.</p>
+</div>
+
+<div class="details">
+  <h3>Request Details</h3>
+  <p><strong>Description:</strong> <%= @approval.description %></p>
+  <p><strong>Action ID:</strong> <%= @approval.action_id %></p>
+  <p><strong>Requested on:</strong> <%= format_date(@approval.created_at) %></p>
+  <p><strong>Expires on:</strong> <%= format_date(@expires_at) %></p>
+  
+  <% if @approval.details.present? %>
+    <h4>Additional Details:</h4>
+    <% @approval.details.each do |key, value| %>
+      <p><strong><%= key.humanize %>:</strong> <%= value %></p>
+    <% end %>
+  <% end %>
+</div>
+
+<% if @time_remaining > 0 %>
+  <div style="text-align: center; margin: 30px 0;">
+    <p><strong>Please take action on this request:</strong></p>
+    <a href="<%= @approval_url %>" class="button approve">Review & Approve/Reject</a>
+  </div>
+<% else %>
+  <div class="error">
+    <p><strong>Expired:</strong> This approval request has expired and can no longer be processed.</p>
+  </div>
+<% end %>
+
+<p>If you cannot click the button above, please copy and paste the following link into your browser:</p>
+<p><%= @approval_url %></p>
+
+<p>Thank you for your prompt attention to this matter.</p>
+
+<p>Best regards,<br>
+The Approval Workflow System</p>

@@ -1,0 +1,39 @@
+# MongoDB Configuration using Mongoid
+
+development:
+  clients:
+    default:
+      database: approval_workflow_development
+      hosts:
+        - localhost:27017
+      options:
+        user: admin
+        password: password
+        auth_source: admin
+        server_selection_timeout: 5
+
+test:
+  clients:
+    default:
+      database: approval_workflow_test
+      hosts:
+        - localhost:27017
+      options:
+        user: admin
+        password: password
+        auth_source: admin
+        read:
+          mode: :primary
+        max_pool_size: 1
+
+production:
+  clients:
+    default:
+      uri: <%= ENV['MONGODB_URI'] %>
+      options:
+        server_selection_timeout: 30
+        wait_queue_timeout: 15
+        connect_timeout: 15
+        socket_timeout: 15
+        max_pool_size: 20
+        min_pool_size: 5

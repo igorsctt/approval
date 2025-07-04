@@ -1,0 +1,21 @@
+<h2>Email Configuration Test</h2>
+
+<p>Hello,</p>
+
+<p>This is a test email to verify that the email configuration for the Approval Workflow System is working correctly.</p>
+
+<div class="success">
+  <p><strong>Test Status:</strong> Email configuration is working properly!</p>
+</div>
+
+<div class="details">
+  <h3>Test Details</h3>
+  <p><strong>Sent at:</strong> <%= format_date(@timestamp) %></p>
+  <p><strong>Environment:</strong> <%= @environment %></p>
+  <p><strong>Server:</strong> <%= ENV['SMTP_HOST'] %></p>
+</div>
+
+<p>If you received this email, it means the email service is configured correctly and approval notifications will be sent successfully.</p>
+
+<p>Best regards,<br>
+The Approval Workflow System</p>

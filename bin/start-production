@@ -1,0 +1,32 @@
+#!/bin/bash
+
+# Script de inicialização para produção
+echo "🚀 Iniciando sistema de aprovação KAEFER..."
+
+# Verificar variáveis de ambiente obrigatórias
+if [ -z "$MONGODB_URI" ]; then
+  echo "❌ MONGODB_URI não configurada!"
+  exit 1
+fi
+
+if [ -z "$JWT_SECRET" ]; then
+  echo "❌ JWT_SECRET não configurada!"
+  exit 1
+fi
+
+echo "✅ Variáveis de ambiente verificadas"
+
+# Criar índices MongoDB
+echo "📊 Criando índices MongoDB..."
+bundle exec rails db:mongoid:create_indexes
+
+# Criar usuários padrão se não existirem
+echo "👥 Verificando usuários padrão..."
+bundle exec rails db:seed
+
+echo "🎉 Sistema pronto para uso!"
+echo "📧 Admin: admin@kaefer.com | Senha: admin123"
+echo "👤 User: user@kaefer.com | Senha: user123"
+
+# Iniciar servidor
+bundle exec puma -C config/puma.rb

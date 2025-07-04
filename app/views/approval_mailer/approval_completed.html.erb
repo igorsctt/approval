@@ -1,0 +1,42 @@
+<h2>Approval Request <%= @status_text %></h2>
+
+<p>Hello,</p>
+
+<p>Your approval request has been <strong><%= @status_text.downcase %></strong>.</p>
+
+<div class="<%= @approved ? 'success' : 'error' %>">
+  <p><strong>Status:</strong> <%= @status_text %></p>
+</div>
+
+<div class="details">
+  <h3>Request Details</h3>
+  <p><strong>Description:</strong> <%= @approval.description %></p>
+  <p><strong>Action ID:</strong> <%= @approval.action_id %></p>
+  <p><strong>Requested on:</strong> <%= format_date(@approval.created_at) %></p>
+  <p><strong>Processed on:</strong> <%= format_date(@approval.processed_at) %></p>
+  <% if @approval.signature.present? %>
+    <p><strong>Processed by:</strong> <%= @approval.signature %></p>
+  <% end %>
+  
+  <% if @approval.details.present? %>
+    <h4>Additional Details:</h4>
+    <% @approval.details.each do |key, value| %>
+      <p><strong><%= key.humanize %>:</strong> <%= value %></p>
+    <% end %>
+  <% end %>
+</div>
+
+<% if @approved %>
+  <div class="success">
+    <p>Your request has been approved and you can now proceed with the requested action.</p>
+  </div>
+<% else %>
+  <div class="error">
+    <p>Your request has been rejected. Please contact the relevant department if you need more information.</p>
+  </div>
+<% end %>
+
+<p>If you have any questions about this decision, please contact your system administrator.</p>
+
+<p>Best regards,<br>
+The Approval Workflow System</p>

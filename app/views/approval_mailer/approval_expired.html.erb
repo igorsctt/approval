@@ -1,0 +1,33 @@
+<h2>Approval Request Expired</h2>
+
+<p>Hello,</p>
+
+<p>Your approval request has expired and can no longer be processed.</p>
+
+<div class="error">
+  <p><strong>Status:</strong> Expired</p>
+</div>
+
+<div class="details">
+  <h3>Request Details</h3>
+  <p><strong>Description:</strong> <%= @approval.description %></p>
+  <p><strong>Action ID:</strong> <%= @approval.action_id %></p>
+  <p><strong>Requested on:</strong> <%= format_date(@approval.created_at) %></p>
+  <p><strong>Expired on:</strong> <%= format_date(@approval.expire_at) %></p>
+  
+  <% if @approval.details.present? %>
+    <h4>Additional Details:</h4>
+    <% @approval.details.each do |key, value| %>
+      <p><strong><%= key.humanize %>:</strong> <%= value %></p>
+    <% end %>
+  <% end %>
+</div>
+
+<div class="warning">
+  <p><strong>Next Steps:</strong> If you still need approval for this request, please submit a new approval request.</p>
+</div>
+
+<p>If you have any questions, please contact your system administrator.</p>
+
+<p>Best regards,<br>
+The Approval Workflow System</p>
