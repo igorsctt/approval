@@ -47,12 +47,6 @@ preload_app!
 # Allow puma to be restarted by `rails restart` command.
 plugin :tmp_restart
 
-# Configuration for development environment
-if ENV.fetch('RAILS_ENV', 'development') == 'development'
-  # Bind to all interfaces in development
-  bind "tcp://0.0.0.0:#{ENV.fetch('PORT') { 3000 }}"
-end
-
 # Production configuration
 if ENV.fetch('RAILS_ENV', 'development') == 'production'
   # Always use TCP binding in production for cloud platforms
@@ -63,17 +57,17 @@ if ENV.fetch('RAILS_ENV', 'development') == 'production'
                   ENV.fetch('PUMA_STDERR_LOG', 'log/puma.stderr.log'),
                   true
 
-  # Specify the PID file location
+  # Specify the PID file location for production
   pidfile ENV.fetch('PUMA_PIDFILE', 'tmp/pids/puma.pid')
-
-  # Change to match your CPU core count - use 1 for free tier
-  workers ENV.fetch('WEB_CONCURRENCY') { 1 }
-
-  # Min and Max threads per worker - reduced for memory efficiency
-  threads 1, 3
-
+  
+  # Force workers to 0 in production for true single mode
+  workers 0
+  
   # Use the tag to identify the process
   tag 'approval_workflow'
+else
+  # Development configuration
+  bind "tcp://0.0.0.0:#{ENV.fetch('PORT') { 3000 }}"
 end
 
 # MongoDB configuration for production

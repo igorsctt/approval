@@ -5,7 +5,8 @@ set -o errexit
 
 # Create necessary directories
 echo "Creating necessary directories..."
-mkdir -p tmp/pids tmp/cache tmp/sockets log
+mkdir -p tmp/pids tmp/cache tmp/sockets log storage
+chmod 755 tmp/pids tmp/cache tmp/sockets log storage
 
 # Install Node.js dependencies
 echo "Installing Node.js dependencies..."

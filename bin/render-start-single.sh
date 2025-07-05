@@ -3,6 +3,14 @@
 
 echo "Starting Rails in true single process mode..."
 
+# Ensure all necessary directories exist
+echo "Creating necessary directories..."
+mkdir -p tmp/pids
+mkdir -p tmp/cache
+mkdir -p tmp/sockets
+mkdir -p log
+mkdir -p storage
+
 # Kill any existing processes
 pkill -f puma || true
 sleep 3

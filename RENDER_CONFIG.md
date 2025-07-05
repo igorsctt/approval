@@ -51,4 +51,34 @@ Change Start Command in Render dashboard to one of the options above.
 - MongoDB ready ✅
 - Puma optimized ✅
 
-**The app is 99% ready! Just need to fix the port conflict on restart.**
+## Troubleshooting Start Commands
+
+If the default start command fails, try these alternatives in order:
+
+### Option 1: Standard Start (Current)
+**Start Command:** `bin/render-start.sh`
+- Uses config/puma.rb configuration
+- Creates all necessary directories
+- Handles port conflicts
+
+### Option 2: Single Process Mode
+**Start Command:** `bin/render-start-single.sh`
+- Bypasses puma config file
+- Direct command line parameters
+- True single process mode
+
+### Option 3: No PID File Mode
+**Start Command:** `bin/render-start-nopid.sh`
+- Runs without PID file
+- Fallback for directory permission issues
+- Still creates necessary directories
+
+## Latest Updates
+
+- ✅ Build script creates all necessary directories (tmp/pids, tmp/cache, tmp/sockets, log, storage)
+- ✅ All start scripts ensure directories exist before Puma starts
+- ✅ Puma configuration cleaned and simplified for production
+- ✅ Three different start options for maximum compatibility
+- ✅ Fixed directory permissions and creation timing
+
+**The app is ready for deployment! Try the start commands in order if one fails.**
