@@ -3,11 +3,20 @@
 class AuthController < ApplicationController
   include Authorization
   layout 'auth'
-  skip_before_action :authenticate_user!, only: [:login, :authenticate, :debug_auth]
+  skip_before_action :authenticate_user!, only: [:login, :authenticate, :debug_auth, :check_env]
   
   def login
     # Redirecionar se já estiver logado
     redirect_to approvals_path if current_user
+  end
+  
+  # Método para verificar variáveis de ambiente
+  def check_env
+    render json: {
+      mongodb_uri: ENV['MONGODB_URI'],
+      rails_env: ENV['RAILS_ENV'],
+      database_name: ENV['MONGODB_URI']&.split('/')&.last&.split('?')&.first
+    }
   end
   
   # Método debug temporário para ver erros reais
