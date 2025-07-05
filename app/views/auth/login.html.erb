@@ -31,8 +31,66 @@
 </div>
 
 <script>
-  document.getElementById('login-form').addEventListener('submit', function() {
+  // Debug logging function
+  function logDebug(message, data = null) {
+    console.log(`[AUTH DEBUG] ${message}`, data || '');
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    logDebug('DOM loaded, initializing login form');
+    
+    const form = document.getElementById('login-form');
     const submitBtn = document.getElementById('login-submit');
-    submitBtn.textContent = 'Entrando...';
+    const emailField = document.querySelector('input[name="email"]');
+    const passwordField = document.querySelector('input[name="password"]');
+    
+    logDebug('Form elements found', {
+      form: !!form,
+      submitBtn: !!submitBtn,
+      emailField: !!emailField,
+      passwordField: !!passwordField
+    });
+    
+    if (form) {
+      form.addEventListener('submit', function(e) {
+        logDebug('Form submission started');
+        
+        const email = emailField.value;
+        const password = passwordField.value;
+        
+        logDebug('Form data', {
+          email: email,
+          passwordLength: password.length,
+          hasEmail: !!email,
+          hasPassword: !!password
+        });
+        
+        if (submitBtn) {
+          submitBtn.textContent = 'Entrando...';
+          submitBtn.disabled = true;
+          logDebug('Submit button updated');
+        }
+        
+        // Don't prevent default - let the form submit normally
+        logDebug('Form submitting to:', form.action);
+      });
+    }
+    
+    // Monitor for any errors
+    window.addEventListener('error', function(e) {
+      logDebug('JavaScript error detected', {
+        message: e.message,
+        filename: e.filename,
+        lineno: e.lineno
+      });
+    });
+    
+    // Check if we're on the login page after a redirect (error case)
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('alert') || window.location.search.includes('alert')) {
+      logDebug('Page loaded with alert parameter, possible error redirect');
+    }
+    
+    logDebug('Login page initialization complete');
   });
 </script>

@@ -5,9 +5,9 @@ require 'bundler/setup'
 require 'mongoid'
 
 # Test MongoDB connection with the correct database
-mongodb_uri = "mongodb+srv://sousaigor:zRFWDklR6NiE3UOI@cluster0.qjyol.mongodb.net/kaefer_approval?retryWrites=true&w=majority&appName=Cluster0"
+mongodb_uri = 'mongodb+srv://sousaigor:zRFWDklR6NiE3UOI@cluster0.qjyol.mongodb.net/kaefer_approval?retryWrites=true&w=majority&appName=Cluster0'
 
-puts "Testing MongoDB connection..."
+puts 'Testing MongoDB connection...'
 puts "URI: #{mongodb_uri}"
 puts "Database name from URI: #{mongodb_uri.split('/').last.split('?').first}"
 
@@ -30,29 +30,28 @@ begin
   # Test connection
   client = Mongoid::Clients.default
   client.database.command(ping: 1)
-  puts "✅ Connection successful!"
+  puts '✅ Connection successful!'
   puts "Database name: #{client.database.name}"
-  
+
   # Test collections
   collections = client.database.collection_names
   puts "Available collections: #{collections}"
-  
+
   # Test if we can access the User collection
   if collections.include?('users')
     user_count = client['users'].count_documents
     puts "User count: #{user_count}"
-    
+
     # List first few users (email only for privacy)
     users = client['users'].find.limit(3).to_a
-    puts "Sample users:"
+    puts 'Sample users:'
     users.each do |user|
       puts "  - Email: #{user['email']}"
     end
   else
     puts "⚠️  No 'users' collection found"
   end
-  
-rescue => e
+rescue StandardError => e
   puts "❌ Connection failed: #{e.message}"
   puts "Error details: #{e.backtrace.first(3)}"
 end

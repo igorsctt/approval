@@ -45,6 +45,10 @@ module ApprovalWorkflow
     config.autoload_paths << Rails.root.join('lib')
     config.autoload_paths << Rails.root.join('app', 'services')
     config.autoload_paths << Rails.root.join('app', 'serializers')
+    config.autoload_paths << Rails.root.join('app', 'middleware')
+
+    # Request logging middleware for debugging
+    config.middleware.insert_before ActionDispatch::RequestId, RequestLoggerMiddleware
 
     # CORS configuration
     config.middleware.insert_before 0, Rack::Cors do

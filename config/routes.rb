@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   post 'authenticate', to: 'auth#authenticate'
   post 'debug_auth', to: 'auth#debug_auth' # Debug route temporário
   get 'debug_database', to: 'auth#debug_database' # Database debug route
+  get 'production_debug', to: 'auth#production_debug' # Production debug route
   get 'check_env', to: 'auth#check_env' # Check environment variables
   delete 'logout', to: 'auth#logout'
   get 'logout', to: 'auth#logout'
@@ -39,15 +40,15 @@ Rails.application.routes.draw do
       # Authentication routes
       post 'auth/login', to: 'auth#login'
       post 'auth/validate', to: 'auth#validate'
-      
+
       # Approval routes
-      resources :approvals, only: [:create, :index, :show] do
+      resources :approvals, only: %i[create index show] do
         collection do
           get 'validate', to: 'approvals#validate_token'
           put 'approve', to: 'approvals#approve'
           put 'reject', to: 'approvals#reject'
         end
-        
+
         member do
           get 'logs', to: 'approvals#logs'
         end
@@ -56,5 +57,5 @@ Rails.application.routes.draw do
   end
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
-  get "up" => "rails/health#show", as: :rails_health_check
+  get 'up' => 'rails/health#show', as: :rails_health_check
 end

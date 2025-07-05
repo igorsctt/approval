@@ -57,7 +57,7 @@ gem 'httparty'
 gem 'geoip'
 
 # Environment variables
-# gem 'dotenv-rails'  # Temporariamente removido
+gem 'dotenv-rails'  # Para carregar variáveis do .env
 
 # Pagination
 gem 'kaminari'
