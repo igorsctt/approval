@@ -23,4 +23,8 @@ echo "Skipping assets:precompile due to webpack/babel compatibility issues"
 # Create database if needed (MongoDB Atlas - already configured)
 echo "Database configured via MongoDB Atlas"
 
+# Run database seeds to create initial users
+echo "Running database seeds..."
+RAILS_ENV=production bundle exec rails db:seed
+
 echo "Build completed successfully!"
