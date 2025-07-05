@@ -59,10 +59,10 @@ if ENV.fetch('RAILS_ENV', 'development') == 'production'
 
   # Specify the PID file location for production
   pidfile ENV.fetch('PUMA_PIDFILE', 'tmp/pids/puma.pid')
-  
+
   # Force workers to 0 in production for true single mode
   workers 0
-  
+
   # Use the tag to identify the process
   tag 'approval_workflow'
 else

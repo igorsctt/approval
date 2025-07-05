@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   # Authentication routes
   get 'login', to: 'auth#login'
   post 'authenticate', to: 'auth#authenticate'
+  post 'debug_auth', to: 'auth#debug_auth' # Debug route temporário
   delete 'logout', to: 'auth#logout'
   get 'logout', to: 'auth#logout'
 
