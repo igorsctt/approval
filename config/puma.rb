@@ -30,8 +30,12 @@ pidfile ENV.fetch('PIDFILE') { 'tmp/pids/server.pid' }
 # the concurrency of the application would be max `threads` * `workers`.
 # Workers do not work on JRuby or Windows (both of which do not support
 # processes).
+# Use 0 for true single mode (recommended for free tier)
 #
-workers ENV.fetch('WEB_CONCURRENCY') { 1 }
+workers ENV.fetch('WEB_CONCURRENCY') { 0 }
+
+# Silence single worker warning when using workers = 1
+silence_single_worker_warning
 
 # Use the `preload_app!` method when specifying a `workers` number.
 # This directive tells Puma to first boot the application and load code
