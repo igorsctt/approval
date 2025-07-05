@@ -3,7 +3,8 @@
 class AuthController < ApplicationController
   include Authorization
   layout 'auth'
-  skip_before_action :authenticate_user!, only: %i[login authenticate debug_auth debug_database production_debug check_env]
+  skip_before_action :authenticate_user!,
+                     only: %i[login authenticate debug_auth debug_database production_debug check_env]
 
   def login
     # Redirecionar se já estiver logado
@@ -121,65 +122,64 @@ class AuthController < ApplicationController
   end
 
   def authenticate
-    Rails.logger.info "=== AUTHENTICATE START ==="
+    Rails.logger.info '=== AUTHENTICATE START ==='
     Rails.logger.info "Request method: #{request.method}"
     Rails.logger.info "Request URL: #{request.url}"
     Rails.logger.info "User IP: #{request.remote_ip}"
     Rails.logger.info "User Agent: #{request.user_agent}"
-    
+
     begin
       email = params[:email]
       password = params[:password]
-      
+
       Rails.logger.info "Email param: #{email}"
       Rails.logger.info "Password present: #{password.present?}"
-      
+
       # Test database connection first
-      Rails.logger.info "Testing database connection..."
+      Rails.logger.info 'Testing database connection...'
       client = Mongoid::Clients.default
       client.database.command(ping: 1)
-      Rails.logger.info "Database ping successful"
+      Rails.logger.info 'Database ping successful'
       Rails.logger.info "Connected to database: #{client.database.name}"
-      
+
       # Test user count
       user_count = User.count
       Rails.logger.info "Total users in database: #{user_count}"
-      
+
       # Try to find user by email first
       Rails.logger.info "Searching for user with email: #{email}"
       found_user = User.find_by(email: email&.downcase&.strip)
-      
+
       if found_user
         Rails.logger.info "User found - ID: #{found_user.id}, Email: #{found_user.email}, Active: #{found_user.active?}"
       else
         Rails.logger.warn "No user found with email: #{email}"
       end
-      
+
       # Now try authentication
-      Rails.logger.info "Attempting authentication..."
+      Rails.logger.info 'Attempting authentication...'
       user = User.authenticate(email, password)
-      
+
       if user
         Rails.logger.info "Authentication successful for user: #{user.email}"
         login_user!(user)
-        Rails.logger.info "User logged in successfully, redirecting to approvals"
+        Rails.logger.info 'User logged in successfully, redirecting to approvals'
         redirect_to approvals_path, notice: 'Login realizado com sucesso!'
       else
         Rails.logger.warn "Authentication failed for email: #{email}"
         redirect_to login_path, alert: 'Email ou senha inválidos'
       end
-      
     rescue StandardError => e
-      Rails.logger.error "=== AUTHENTICATE ERROR ==="
+      Rails.logger.error '=== AUTHENTICATE ERROR ==='
       Rails.logger.error "Error class: #{e.class}"
       Rails.logger.error "Error message: #{e.message}"
-      Rails.logger.error "Backtrace:"
+      Rails.logger.error 'Backtrace:'
       Rails.logger.error e.backtrace.join("\n")
-      
+
       # Try to render a JSON error for AJAX requests, otherwise redirect
       if request.xhr? || request.content_type&.include?('application/json')
-        render json: { 
-          error: 'Internal server error', 
+        render json: {
+          error: 'Internal server error',
           message: e.message,
           details: e.backtrace.first(5)
         }, status: 500
@@ -187,7 +187,7 @@ class AuthController < ApplicationController
         redirect_to login_path, alert: 'Erro interno do servidor. Tente novamente.'
       end
     ensure
-      Rails.logger.info "=== AUTHENTICATE END ==="
+      Rails.logger.info '=== AUTHENTICATE END ==='
     end
   end
 
@@ -198,8 +198,8 @@ class AuthController < ApplicationController
 
   # Special endpoint for production debugging
   def production_debug
-    Rails.logger.info "=== PRODUCTION DEBUG START ==="
-    
+    Rails.logger.info '=== PRODUCTION DEBUG START ==='
+
     begin
       # Environment information
       env_data = {
@@ -208,39 +208,39 @@ class AuthController < ApplicationController
         mongodb_uri_preview: ENV['MONGODB_URI']&.gsub(/:[^:@]*@/, ':***@'),
         database_name_from_env: ENV['MONGODB_URI']&.split('/')&.last&.split('?')&.first
       }
-      
+
       Rails.logger.info "Environment data: #{env_data}"
-      
+
       # Test MongoDB connection
-      Rails.logger.info "Testing MongoDB connection..."
+      Rails.logger.info 'Testing MongoDB connection...'
       client = Mongoid::Clients.default
-      
+
       # Get MongoDB info
       ping_result = client.database.command(ping: 1)
       Rails.logger.info "MongoDB ping result: #{ping_result}"
-      
+
       db_name = client.database.name
       Rails.logger.info "Connected to database: #{db_name}"
-      
+
       # Get server info
       server_status = client.database.command(serverStatus: 1)
       Rails.logger.info "MongoDB host: #{server_status.dig('host')}"
-      
+
       # Collection info
       collections = client.database.collection_names
       Rails.logger.info "Available collections: #{collections}"
-      
+
       # User collection info
       if collections.include?('users')
         user_count = User.count
         Rails.logger.info "Users count: #{user_count}"
-        
+
         sample_emails = User.limit(3).pluck(:email)
         Rails.logger.info "Sample user emails: #{sample_emails}"
       else
-        Rails.logger.warn "Users collection not found!"
+        Rails.logger.warn 'Users collection not found!'
       end
-      
+
       render json: {
         success: true,
         environment: env_data,
@@ -253,12 +253,11 @@ class AuthController < ApplicationController
         },
         timestamp: Time.current
       }
-      
     rescue StandardError => e
-      Rails.logger.error "=== PRODUCTION DEBUG ERROR ==="
+      Rails.logger.error '=== PRODUCTION DEBUG ERROR ==='
       Rails.logger.error "Error: #{e.message}"
       Rails.logger.error "Backtrace: #{e.backtrace.join("\n")}"
-      
+
       render json: {
         success: false,
         error: e.message,
@@ -271,7 +270,7 @@ class AuthController < ApplicationController
         timestamp: Time.current
       }, status: 500
     ensure
-      Rails.logger.info "=== PRODUCTION DEBUG END ==="
+      Rails.logger.info '=== PRODUCTION DEBUG END ==='
     end
   end
 end
