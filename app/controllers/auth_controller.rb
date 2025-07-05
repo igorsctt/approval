@@ -3,7 +3,7 @@
 class AuthController < ApplicationController
   include Authorization
   layout 'auth'
-  skip_before_action :authenticate_user!, only: [:login, :authenticate, :debug_auth, :check_env]
+  skip_before_action :authenticate_user!, only: [:login, :authenticate, :debug_auth, :debug_database, :check_env]
   
   def login
     # Redirecionar se já estiver logado
@@ -56,6 +56,70 @@ class AuthController < ApplicationController
       Rails.logger.error e.backtrace.join("\n")
       render json: { 
         error: e.message,
+        backtrace: e.backtrace.first(5)
+      }, status: 500
+    end
+  end
+  
+  # Comprehensive debug method for database connection
+  def debug_database
+    begin
+      Rails.logger.info "=== Database Debug Started ==="
+      
+      # Environment info
+      env_info = {
+        mongodb_uri: ENV['MONGODB_URI'],
+        rails_env: ENV['RAILS_ENV'],
+        database_name_from_uri: ENV['MONGODB_URI']&.split('/')&.last&.split('?')&.first
+      }
+      
+      Rails.logger.info "Environment: #{env_info}"
+      
+      # Test database connection
+      Rails.logger.info "Testing database connection..."
+      client = Mongoid::Clients.default
+      client.database.command(ping: 1)
+      
+      # Get actual database name
+      actual_db_name = client.database.name
+      Rails.logger.info "Connected to database: #{actual_db_name}"
+      
+      # Get collection names
+      collections = client.database.collection_names
+      Rails.logger.info "Collections: #{collections}"
+      
+      # Test User model
+      user_count = User.count
+      Rails.logger.info "User count: #{user_count}"
+      
+      # Sample user data (if any)
+      sample_users = User.limit(3).pluck(:email)
+      Rails.logger.info "Sample users: #{sample_users}"
+      
+      render json: {
+        success: true,
+        environment: env_info,
+        database: {
+          name: actual_db_name,
+          collections: collections,
+          user_count: user_count,
+          sample_users: sample_users
+        },
+        message: "Database connection successful!"
+      }
+      
+    rescue => e
+      Rails.logger.error "Database debug error: #{e.message}"
+      Rails.logger.error e.backtrace.join("\n")
+      
+      render json: {
+        success: false,
+        error: e.message,
+        environment: {
+          mongodb_uri: ENV['MONGODB_URI'],
+          rails_env: ENV['RAILS_ENV'],
+          database_name_from_uri: ENV['MONGODB_URI']&.split('/')&.last&.split('?')&.first
+        },
         backtrace: e.backtrace.first(5)
       }, status: 500
     end

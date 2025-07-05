@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   get 'login', to: 'auth#login'
   post 'authenticate', to: 'auth#authenticate'
   post 'debug_auth', to: 'auth#debug_auth' # Debug route temporário
+  get 'debug_database', to: 'auth#debug_database' # Database debug route
   get 'check_env', to: 'auth#check_env' # Check environment variables
   delete 'logout', to: 'auth#logout'
   get 'logout', to: 'auth#logout'
