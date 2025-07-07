@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   post 'debug_auth', to: 'auth#debug_auth' # Debug route temporário
   get 'debug_database', to: 'auth#debug_database' # Database debug route
   get 'production_debug', to: 'auth#production_debug' # Production debug route
+  post 'create_admin_user', to: 'auth#create_admin_user' # Create admin user
   get 'check_env', to: 'auth#check_env' # Check environment variables
   delete 'logout', to: 'auth#logout'
   get 'logout', to: 'auth#logout'

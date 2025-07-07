@@ -4,7 +4,7 @@ class AuthController < ApplicationController
   include Authorization
   layout 'auth'
   skip_before_action :authenticate_user!,
-                     only: %i[login authenticate debug_auth debug_database production_debug check_env]
+                     only: %i[login authenticate debug_auth debug_database production_debug create_admin_user check_env]
 
   def login
     # Redirecionar se já estiver logado
@@ -271,6 +271,69 @@ class AuthController < ApplicationController
       }, status: 500
     ensure
       Rails.logger.info '=== PRODUCTION DEBUG END ==='
+    end
+  end
+
+  # Endpoint to create admin user in production
+  def create_admin_user
+    Rails.logger.info "=== CREATE ADMIN USER START ==="
+
+    begin
+      # Check if admin already exists
+      existing_admin = User.find_by(email: 'admin@kaefer.com')
+
+      if existing_admin
+        Rails.logger.info "Admin user already exists"
+        render json: {
+          success: true,
+          message: "Admin user already exists",
+          user: { email: existing_admin.email, role: existing_admin.role }
+        }
+        return
+      end
+
+      # Create admin user
+      admin_user = User.new(
+        name: 'Administrator',
+        email: 'admin@kaefer.com',
+        role: 'admin',
+        active: true
+      )
+
+      admin_user.password = 'admin123'
+
+      if admin_user.save
+        Rails.logger.info "Admin user created successfully"
+        render json: {
+          success: true,
+          message: "Admin user created successfully",
+          user: {
+            id: admin_user.id.to_s,
+            name: admin_user.name,
+            email: admin_user.email,
+            role: admin_user.role
+          }
+        }
+      else
+        Rails.logger.error "Failed to create admin user: #{admin_user.errors.full_messages}"
+        render json: {
+          success: false,
+          error: "Failed to create admin user",
+          errors: admin_user.errors.full_messages
+        }, status: 422
+      end
+
+    rescue StandardError => e
+      Rails.logger.error "Error creating admin user: #{e.message}"
+      Rails.logger.error e.backtrace.join("\n")
+
+      render json: {
+        success: false,
+        error: e.message,
+        error_class: e.class.name
+      }, status: 500
+    ensure
+      Rails.logger.info "=== CREATE ADMIN USER END ==="
     end
   end
 end
