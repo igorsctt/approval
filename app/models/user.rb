@@ -12,13 +12,13 @@ class User
   field :last_login_at, type: Time
   field :login_count, type: Integer, default: 0
 
-  # Authentication method (replacing has_secure_password)
+  # Authentication method (replacing has_secure_password) test
   require 'bcrypt'
-  
+
   def password=(new_password)
     self.password_digest = BCrypt::Password.create(new_password)
   end
-  
+
   def authenticate_password(password)
     BCrypt::Password.new(password_digest) == password
   end
@@ -87,7 +87,7 @@ class User
   def self.authenticate(email, password)
     user = find_by(email: email.downcase.strip)
     return nil unless user&.active?
-    
+
     if user.authenticate_password(password)
       user.update_login_stats!
       user
@@ -97,13 +97,11 @@ class User
   end
 
   def self.find_by_token(token)
-    begin
-      payload = JwtService.decode(token)
-      user = find(payload['user_id'])
-      user if user&.active?
-    rescue JWT::DecodeError, Mongoid::Errors::DocumentNotFound
-      nil
-    end
+    payload = JwtService.decode(token)
+    user = find(payload['user_id'])
+    user if user&.active?
+  rescue JWT::DecodeError, Mongoid::Errors::DocumentNotFound
+    nil
   end
 
   private
