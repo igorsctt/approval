@@ -280,7 +280,7 @@ class AuthController < ApplicationController
 
     begin
       # Check if admin already exists
-      existing_admin = User.find_by(email: 'admin@kaefer.com')
+      existing_admin = User.where(email: 'admin@kaefer.com').first
 
       if existing_admin
         Rails.logger.info "Admin user already exists"
